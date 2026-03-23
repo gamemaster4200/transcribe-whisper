@@ -30,6 +30,7 @@ parser.add_argument("-o", "--output", default="transcript.txt", help="Output fil
 parser.add_argument("--lang", default="uk", help="Language code (default: uk)")
 parser.add_argument("--model", default="whisper-1", help="Whisper model (default: whisper-1)")
 parser.add_argument("--live", action="store_true", help="Print each transcript immediately after processing")
+parser.add_argument("-n", "--dry-run", action="store_true", help="Estimate cost only, do not transcribe")
 args = parser.parse_args()
 
 total_seconds = sum(get_duration_seconds(f) for f in args.files)
@@ -37,6 +38,8 @@ total_minutes = math.ceil(total_seconds / 60)
 estimated_cost = total_minutes * WHISPER_COST_PER_MINUTE
 
 print(f"Estimated cost: ~${estimated_cost:.4f}  ({total_minutes} min @ ${WHISPER_COST_PER_MINUTE}/min)")
+if args.dry_run:
+    sys.exit(0)
 confirm = input("Proceed? [y/N] ").strip().lower()
 if confirm != "y":
     print("Aborted.")
