@@ -29,6 +29,7 @@ parser.add_argument("files", nargs="+", help="Audio file(s) to transcribe")
 parser.add_argument("-o", "--output", default="transcript.txt", help="Output file (default: transcript.txt)")
 parser.add_argument("--lang", default="uk", help="Language code (default: uk)")
 parser.add_argument("--model", default="whisper-1", help="Whisper model (default: whisper-1)")
+parser.add_argument("--live", action="store_true", help="Print each transcript immediately after processing")
 args = parser.parse_args()
 
 total_seconds = sum(get_duration_seconds(f) for f in args.files)
@@ -73,6 +74,8 @@ for i, part in enumerate(args.files):
         t.join()
 
     full_text.append(result)
+    if args.live:
+        print(result)
 
 with open(args.output, "w") as out:
     out.write("\n\n".join(full_text))
