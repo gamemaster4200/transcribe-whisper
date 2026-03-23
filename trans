@@ -19,6 +19,7 @@ def get_duration_seconds(filepath):
 
 parser = argparse.ArgumentParser(description="Transcribe audio files using Whisper")
 parser.add_argument("files", nargs="+", help="Audio file(s) to transcribe")
+parser.add_argument("-o", "--output", default="transcript.txt", help="Output file (default: transcript.txt)")
 args = parser.parse_args()
 
 total_seconds = sum(get_duration_seconds(f) for f in args.files)
@@ -64,7 +65,7 @@ for i, part in enumerate(args.files):
 
     full_text.append(result)
 
-with open("transcript.txt", "w") as out:
+with open(args.output, "w") as out:
     out.write("\n\n".join(full_text))
 
-print("✅ Done → transcript.txt")
+print(f"✅ Done → {args.output}")
