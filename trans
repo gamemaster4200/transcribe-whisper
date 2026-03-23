@@ -4,11 +4,15 @@ import math
 import sys
 import threading
 import time
+from pathlib import Path
 from dotenv import load_dotenv
 from mutagen import File as AudioFile
 from openai import OpenAI
 
-load_dotenv()
+# cwd first: `trans audio.mp3` works from any directory;
+# script-dir fallback: global ~/.local/bin/trans symlink also finds .env
+if not load_dotenv():
+    load_dotenv(Path(__file__).resolve().parent / ".env")
 
 WHISPER_COST_PER_MINUTE = 0.006  # USD
 

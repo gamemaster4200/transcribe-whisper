@@ -23,7 +23,7 @@ Create a `.env` file with your API key:
 OPENAI_API_KEY=sk-...
 ```
 
-The script loads `.env` automatically via `python-dotenv`.
+The script loads `.env` automatically via `python-dotenv`, searching in the current directory first, then in the script's own directory.
 
 Alternatively, export the variable in your shell.
 
