@@ -17,10 +17,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file with your API key:
+Copy `.env.example` and fill in your API key:
 
-```
-OPENAI_API_KEY=sk-...
+```bash
+cp .env.example .env
 ```
 
 The script loads `.env` automatically via `python-dotenv`, searching in the current directory first, then in the script's own directory.
