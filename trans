@@ -32,16 +32,19 @@ parser.add_argument("--model", default="whisper-1", help="Whisper model (default
 parser.add_argument("--live", action="store_true", help="Print each transcript immediately after processing")
 parser.add_argument("-n", "--dry-run", action="store_true", help="Estimate cost only, do not transcribe")
 parser.add_argument("-y", "--yes", action="store_true", help="Skip confirmation prompt")
+parser.add_argument("-q", "--quiet", action="store_true", help="Suppress all output except errors")
 args = parser.parse_args()
 
 total_seconds = sum(get_duration_seconds(f) for f in args.files)
 total_minutes = math.ceil(total_seconds / 60)
 estimated_cost = total_minutes * WHISPER_COST_PER_MINUTE
 
-print(f"Estimated cost: ~${estimated_cost:.4f}  ({total_minutes} min @ ${WHISPER_COST_PER_MINUTE}/min)")
+if not args.quiet:
+    print(f"Estimated cost: ~${estimated_cost:.4f}  ({total_minutes} min @ ${WHISPER_COST_PER_MINUTE}/min)")
 if args.dry_run:
     sys.exit(0)
-if not args.yes:
+# --quiet implies --yes: interactive prompt would hang non-interactive pipelines
+if not args.yes and not args.quiet:
     confirm = input("Proceed? [y/N] ").strip().lower()
     if confirm != "y":
         print("Aborted.")
@@ -51,7 +54,8 @@ client = OpenAI()
 full_text = []
 
 for i, part in enumerate(args.files):
-    print(f"\n📂 File {i+1}/{len(args.files)}: {part}")
+    if not args.quiet:
+        print(f"\n📂 File {i+1}/{len(args.files)}: {part}")
 
     stop = threading.Event()
 
@@ -63,8 +67,11 @@ for i, part in enumerate(args.files):
             time.sleep(1)
         print()
 
-    t = threading.Thread(target=spinner, args=(stop,))
-    t.start()
+    # thread only created when not --quiet; t=None ensures safe join() in finally
+    t = None
+    if not args.quiet:
+        t = threading.Thread(target=spinner, args=(stop,))
+        t.start()
 
     try:
         with open(part, "rb") as f:
@@ -76,13 +83,15 @@ for i, part in enumerate(args.files):
             )
     finally:
         stop.set()
-        t.join()
+        if t is not None:
+            t.join()
 
     full_text.append(result)
-    if args.live:
+    if args.live and not args.quiet:
         print(result)
 
 with open(args.output, "w") as out:
     out.write("\n\n".join(full_text))
 
-print(f"✅ Done → {args.output}")
+if not args.quiet:
+    print(f"✅ Done → {args.output}")

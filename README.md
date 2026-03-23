@@ -52,6 +52,7 @@ To uninstall:
 - `--live` — print each transcript immediately after processing
 - `--dry-run` / `-n` — estimate cost only, do not transcribe
 - `--yes` / `-y` — skip confirmation prompt
+- `--quiet` / `-q` — suppress all output except errors (implies `--yes`)
 
 ## Examples
 
