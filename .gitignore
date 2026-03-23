@@ -12,6 +12,7 @@ __pycache__/
 *.mp3
 *.wav
 *.m4a
+!tests/smoke-example.mp3
 
 # Output
 transcript*.txt

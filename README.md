@@ -43,6 +43,14 @@ To uninstall:
 ./uninstall.sh
 ```
 
+## Testing
+
+```bash
+bash tests/smoke.sh
+```
+
+Free tests (`--help`, `--dry-run`) run immediately. API tests require confirmation and cost money.
+
 ## Options
 
 - `--help` / `-h` — show help message and exit
