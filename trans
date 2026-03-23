@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+trans — transcribe audio files to text via OpenAI Whisper API.
+
+Accepts one or more audio files, estimates cost, asks for confirmation,
+then writes the combined transcript to an output file.
+"""
 import argparse
 import math
 import sys
@@ -17,7 +23,8 @@ if not load_dotenv():
 WHISPER_COST_PER_MINUTE = 0.006  # USD
 
 
-def get_duration_seconds(filepath):
+def get_duration_seconds(filepath: str) -> float:
+    """Return audio duration in seconds using mutagen metadata."""
     audio = AudioFile(filepath)
     if audio is None:
         raise ValueError(f"Cannot read audio metadata: {filepath}")
@@ -36,7 +43,7 @@ parser.add_argument("-q", "--quiet", action="store_true", help="Suppress all out
 args = parser.parse_args()
 
 total_seconds = sum(get_duration_seconds(f) for f in args.files)
-total_minutes = math.ceil(total_seconds / 60)
+total_minutes = math.ceil(total_seconds / 60)  # ceil: Whisper bills by the minute started
 estimated_cost = total_minutes * WHISPER_COST_PER_MINUTE
 
 if not args.quiet:
@@ -59,7 +66,8 @@ for i, part in enumerate(args.files):
 
     stop = threading.Event()
 
-    def spinner(stop_event):
+    def spinner(stop_event: threading.Event) -> None:
+        """Print an elapsed-time counter until stop_event is set."""
         start = time.time()
         while not stop_event.is_set():
             print(f"\r⏳ Transcribing... {int(time.time()-start)}s",
