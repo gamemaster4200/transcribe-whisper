@@ -1,0 +1,17 @@
+# Environment
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Audio files
+*.aac
+*.mp3
+*.wav
+*.m4a
+
+# Output
+transcript*.txt
