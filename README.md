@@ -49,6 +49,8 @@ To uninstall:
 trans audio.mp3
 trans part_00.mp3 part_01.mp3 part_02.mp3
 trans part_*.mp3
+trans audio.mp3 --lang en
+trans audio.mp3 -o result.txt
 ```
 
 Or without installing:
@@ -57,4 +59,4 @@ Or without installing:
 ./trans audio.mp3
 ```
 
-Output is written to `transcript.txt`.
+Output is written to `transcript.txt` by default.
