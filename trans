@@ -31,6 +31,7 @@ parser.add_argument("--lang", default="uk", help="Language code (default: uk)")
 parser.add_argument("--model", default="whisper-1", help="Whisper model (default: whisper-1)")
 parser.add_argument("--live", action="store_true", help="Print each transcript immediately after processing")
 parser.add_argument("-n", "--dry-run", action="store_true", help="Estimate cost only, do not transcribe")
+parser.add_argument("-y", "--yes", action="store_true", help="Skip confirmation prompt")
 args = parser.parse_args()
 
 total_seconds = sum(get_duration_seconds(f) for f in args.files)
@@ -40,10 +41,11 @@ estimated_cost = total_minutes * WHISPER_COST_PER_MINUTE
 print(f"Estimated cost: ~${estimated_cost:.4f}  ({total_minutes} min @ ${WHISPER_COST_PER_MINUTE}/min)")
 if args.dry_run:
     sys.exit(0)
-confirm = input("Proceed? [y/N] ").strip().lower()
-if confirm != "y":
-    print("Aborted.")
-    sys.exit(0)
+if not args.yes:
+    confirm = input("Proceed? [y/N] ").strip().lower()
+    if confirm != "y":
+        print("Aborted.")
+        sys.exit(0)
 
 client = OpenAI()
 full_text = []

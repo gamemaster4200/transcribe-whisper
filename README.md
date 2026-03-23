@@ -55,6 +55,7 @@ trans audio.mp3 --model whisper-1
 trans audio.mp3 --live
 trans audio.mp3 -n
 trans part_*.mp3 --lang en --live -o result.txt
+trans part_*.mp3 -y --live
 ```
 
 Or without installing:
