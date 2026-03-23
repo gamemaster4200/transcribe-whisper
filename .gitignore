@@ -14,5 +14,8 @@ __pycache__/
 *.m4a
 !tests/smoke-example.mp3
 
+# Goals (pushed separately to private repo)
+goals.md
+
 # Output
 transcript*.txt
