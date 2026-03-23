@@ -43,7 +43,17 @@ To uninstall:
 ./uninstall.sh
 ```
 
-## Usage
+## Options
+
+- `--help` / `-h` — show help message and exit
+- `--output` / `-o` — output file (default: `transcript.txt`)
+- `--lang` — language code (default: `uk`)
+- `--model` — Whisper model (default: `whisper-1`)
+- `--live` — print each transcript immediately after processing
+- `--dry-run` / `-n` — estimate cost only, do not transcribe
+- `--yes` / `-y` — skip confirmation prompt
+
+## Examples
 
 ```bash
 trans audio.mp3
