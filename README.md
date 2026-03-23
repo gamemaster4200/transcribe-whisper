@@ -23,6 +23,10 @@ Create a `.env` file with your API key:
 OPENAI_API_KEY=sk-...
 ```
 
+The script loads `.env` automatically via `python-dotenv`.
+
+Alternatively, export the variable in your shell.
+
 ## Install (optional)
 
 Adds `trans` to your PATH via a symlink in `~/.local/bin`:

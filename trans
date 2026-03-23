@@ -4,8 +4,11 @@ import math
 import sys
 import threading
 import time
+from dotenv import load_dotenv
 from mutagen import File as AudioFile
 from openai import OpenAI
+
+load_dotenv()
 
 WHISPER_COST_PER_MINUTE = 0.006  # USD
 
