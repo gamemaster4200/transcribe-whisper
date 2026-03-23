@@ -23,12 +23,34 @@ Create a `.env` file with your API key:
 OPENAI_API_KEY=sk-...
 ```
 
+## Install (optional)
+
+Adds `trans` to your PATH via a symlink in `~/.local/bin`:
+
+```bash
+./install.sh
+```
+
+Then open a new terminal, or run `source ~/.bashrc` to apply immediately.
+
+To uninstall:
+
+```bash
+./uninstall.sh
+```
+
 ## Usage
 
 ```bash
-python trans.py audio.mp3
-python trans.py part_00.mp3 part_01.mp3 part_02.mp3
-python trans.py part_*.mp3
+trans audio.mp3
+trans part_00.mp3 part_01.mp3 part_02.mp3
+trans part_*.mp3
+```
+
+Or without installing:
+
+```bash
+./trans audio.mp3
 ```
 
 Output is written to `transcript.txt`.
