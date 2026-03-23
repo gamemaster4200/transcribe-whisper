@@ -1,11 +1,34 @@
 import argparse
+import math
+import sys
 import threading
 import time
+from mutagen import File as AudioFile
 from openai import OpenAI
+
+WHISPER_COST_PER_MINUTE = 0.006  # USD
+
+
+def get_duration_seconds(filepath):
+    audio = AudioFile(filepath)
+    if audio is None:
+        raise ValueError(f"Cannot read audio metadata: {filepath}")
+    return audio.info.length
+
 
 parser = argparse.ArgumentParser(description="Transcribe audio files using Whisper")
 parser.add_argument("files", nargs="+", help="Audio file(s) to transcribe")
 args = parser.parse_args()
+
+total_seconds = sum(get_duration_seconds(f) for f in args.files)
+total_minutes = math.ceil(total_seconds / 60)
+estimated_cost = total_minutes * WHISPER_COST_PER_MINUTE
+
+print(f"Estimated cost: ~${estimated_cost:.4f}  ({total_minutes} min @ ${WHISPER_COST_PER_MINUTE}/min)")
+confirm = input("Proceed? [y/N] ").strip().lower()
+if confirm != "y":
+    print("Aborted.")
+    sys.exit(0)
 
 client = OpenAI()
 full_text = []
